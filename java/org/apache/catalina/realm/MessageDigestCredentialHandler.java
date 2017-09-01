@@ -21,12 +21,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.buf.B2CConverter;
 import org.apache.tomcat.util.buf.HexUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.security.ConcurrentMessageDigest;
 
 /**
@@ -111,7 +111,7 @@ public class MessageDigestCredentialHandler extends DigestCredentialHandlerBase 
                 // Server is storing digested passwords with a prefix indicating
                 // the digest type
                 String serverDigest = storedCredentials.substring(5);
-                String userDigest = Base64.encodeBase64String(ConcurrentMessageDigest.digest(
+                String userDigest = Base64.getEncoder().encodeToString(ConcurrentMessageDigest.digest(
                         getAlgorithm(), inputCredentials.getBytes(StandardCharsets.ISO_8859_1)));
                 return userDigest.equals(serverDigest);
 
@@ -124,7 +124,7 @@ public class MessageDigestCredentialHandler extends DigestCredentialHandlerBase 
                 // Need to convert the salt to bytes to apply it to the user's
                 // digested password.
                 byte[] serverDigestPlusSaltBytes =
-                        Base64.decodeBase64(serverDigestPlusSalt);
+                        Base64.getDecoder().decode(serverDigestPlusSalt);
                 final int saltPos = 20;
                 byte[] serverDigestBytes = new byte[saltPos];
                 System.arraycopy(serverDigestPlusSaltBytes, 0,

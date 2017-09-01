@@ -31,6 +31,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -39,7 +40,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.res.StringManager;
 
 /**
@@ -111,7 +111,7 @@ class PEMFile {
         public String content = "";
 
         private byte[] decode() {
-            return Base64.decodeBase64(content);
+            return Base64.getDecoder().decode(content);
         }
 
         public X509Certificate toCertificate() throws CertificateException {

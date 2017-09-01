@@ -22,6 +22,7 @@ import java.security.Principal;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.regex.Pattern;
 
@@ -37,7 +38,6 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.buf.ByteChunk;
 import org.apache.tomcat.util.buf.MessageBytes;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.compat.JreVendor;
 import org.ietf.jgss.GSSContext;
 import org.ietf.jgss.GSSCredential;
@@ -282,7 +282,7 @@ public class SpnegoAuthenticator extends AuthenticatorBase {
 
         // Send response token on success and failure
         response.setHeader(AUTH_HEADER_NAME, AUTH_HEADER_VALUE_NEGOTIATE + " "
-                + Base64.encodeBase64String(outToken));
+                + Base64.getEncoder().encodeToString(outToken));
 
         if (principal != null) {
             register(request, response, principal, Constants.SPNEGO_METHOD,

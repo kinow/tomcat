@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -42,7 +43,6 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
 import org.apache.tomcat.util.buf.StringUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Task;
@@ -382,7 +382,7 @@ public class SignCode extends Task {
             }
         }
 
-        return Base64.encodeBase64String(baos.toByteArray());
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
 
 
@@ -392,7 +392,7 @@ public class SignCode extends Task {
      */
     private static void extractFilesFromApplicationString(String data, List<File> files)
             throws IOException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decodeBase64(data));
+        ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(data));
         try (ZipInputStream zis = new ZipInputStream(bais)) {
             byte[] buf = new byte[32 * 1024];
             for (int i = 0; i < files.size(); i ++) {

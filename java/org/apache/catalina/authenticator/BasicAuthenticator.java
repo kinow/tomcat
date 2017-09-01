@@ -22,6 +22,7 @@ package org.apache.catalina.authenticator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,6 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.buf.ByteChunk;
 import org.apache.tomcat.util.buf.MessageBytes;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 
 
@@ -182,7 +182,7 @@ public class BasicAuthenticator extends AuthenticatorBase {
          * break characters as well as surplus surrounding white space.
          */
         private byte[] parseBase64() throws IllegalArgumentException {
-            byte[] decoded = Base64.decodeBase64(
+            byte[] decoded = Base64.getDecoder().decode(
                         authorization.getBuffer(),
                         base64blobOffset, base64blobLength);
             //  restore original offset

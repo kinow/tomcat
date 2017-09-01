@@ -19,6 +19,7 @@ package org.apache.tomcat.websocket.server;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -36,7 +37,6 @@ import javax.websocket.Extension;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.ServerEndpointConfig;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.res.StringManager;
 import org.apache.tomcat.util.security.ConcurrentMessageDigest;
 import org.apache.tomcat.websocket.Constants;
@@ -334,6 +334,6 @@ public class UpgradeUtil {
     private static String getWebSocketAccept(String key) {
         byte[] digest = ConcurrentMessageDigest.digestSHA1(
                 key.getBytes(StandardCharsets.ISO_8859_1), WS_ACCEPT);
-        return Base64.encodeBase64String(digest);
+        return Base64.getEncoder().encodeToString(digest);
     }
 }
